@@ -213,9 +213,12 @@ def exportSkin(filePath=None, objs=None, *args):
                             len(dataDic['weights'].keys()), len(dataDic['blendWeights']), obj.name()))
 
 
-    fh = open(filePath, 'wb')
-    pickle.dump(packDic, fh, pickle.HIGHEST_PROTOCOL)
-    fh.close()
+    if packDic["objs"]:
+        fh = open(filePath, 'wb')
+        pickle.dump(packDic, fh, pickle.HIGHEST_PROTOCOL)
+        fh.close()
+    else:
+        return False
 
     return True
 
