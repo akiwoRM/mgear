@@ -111,7 +111,7 @@ class Component(MainComponent):
         v *= self.size*.5
         v += self.guide.apos[1]
 
-        self.upv_cns = pri.addTransformFromPos(self.root, self.getName("upv_cns"), v)
+        self.upv_cns = pri.addTransformFromPos(self.ik_ctl, self.getName("upv_cns"), v)
 
         self.upv_ctl = self.addCtl(self.upv_cns, "upv_ctl", tra.getTransform(self.upv_cns), self.color_ik, "diamond", w=self.size*.12, tp=self.root_ctl)
         if self.settings["mirrorMid"]:
@@ -330,11 +330,11 @@ class Component(MainComponent):
             if len(ref_names) > 1:
                 self.ikref_att = self.addAnimEnumParam("ikref", "Ik Ref", 0, self.settings["ikrefarray"].split(","))
 
+        ref_names = ["Auto", "ikFoot"]
         if self.settings["upvrefarray"]:
-            ref_names = self.settings["upvrefarray"].split(",")
-            ref_names = ["Auto", "ikFoot"] + ref_names
-            if len(ref_names) > 1:
-                self.upvref_att = self.addAnimEnumParam("upvref", "UpV Ref", 0, ref_names)
+            ref_names += self.settings["upvrefarray"].split(",")
+        if len(ref_names) > 1:
+            self.upvref_att = self.addAnimEnumParam("upvref", "UpV Ref", 0, ref_names)
 
         if self.settings["pinrefarray"]:
             ref_names = self.settings["pinrefarray" ].split(",")
@@ -359,7 +359,7 @@ class Component(MainComponent):
         # 1 bone chain Upv ref =====================================================================================
         self.ikHandleUpvRef = pri.addIkHandle(self.root, self.getName("ikHandleLegChainUpvRef"), self.legChainUpvRef, "ikSCsolver")
         pm.pointConstraint(self.ik_ctl, self.ikHandleUpvRef)
-        pm.parentConstraint( self.legChainUpvRef[0], self.upv_cns, mo=True)
+        pm.parentConstraint( self.legChainUpvRef[0], self.ik_ctl, self.upv_cns, mo=True)
 
         # Visibilities -------------------------------------
         #shape.dispGeometry
